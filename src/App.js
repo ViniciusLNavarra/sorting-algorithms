@@ -1,34 +1,45 @@
 import logo from './logo.svg';
 import './App.css';
+import React from 'react';
 
-function App() {
-  let array = [53, 88, 10, 2, 99];
-  function bubbleSort(sortArray) {
-    for (let i = 0; i < sortArray.length-1; i++) {
-      for (let j = 0; j < sortArray.length-i-1; j++) {
-        if (sortArray[j] > sortArray[j+1]){
-          let temp = sortArray[j];
-          sortArray[j] = sortArray[j+1];
-          sortArray[j+1] = temp;
-        }
-      } 
-    }
-    setArray(sortArray);
+function bubbleSort(sortArray) {
+  // Array recieved is a String
+  sortArray = sortArray.split(',').map(Number)
+  for (let i = 0; i < sortArray.length-1; i++) {
+    for (let j = 0; j < sortArray.length-i-1; j++) {
+      if (sortArray[j] > sortArray[j+1]){
+        let temp = sortArray[j];
+        sortArray[j] = sortArray[j+1];
+        sortArray[j+1] = temp;
+      }
+    } 
   }
-  function getArray() {
-    return array;
+  return sortArray;
+}
+
+function Button(props){
+  return React.createElement('button',{onClick:props.handleClick},props.name)
+}
+
+class App extends React.Component {
+  state={
+    array: ([53, 88, 10, 2, 99]).toString()
   }
-  function setArray(newArr) {
-    array = newArr;
+
+  handleSort = () => {
+    this.setState({
+      array: bubbleSort(this.state.array).toString()
+    })
   }
-  return (
-    <div className="App">
-      <header className="App-header"> 
-        <button onClick={()=>bubbleSort(array)}>Click me!</button>
-        <h2>{getArray().toString()}</h2>
-      </header>
-    </div>
-  );
+  
+  render(){
+    return React.createElement('div',{className:"App"},
+      React.createElement('header',{className:"App-header"},
+        React.createElement('p', null, this.state.array),
+        React.createElement(Button,{handleClick:this.handleSort,name:'Sort'},null)
+      )
+    )
+  }
 }
 
 export default App;
